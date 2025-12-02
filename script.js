@@ -1,11 +1,49 @@
 // Storage access error handler - 외부 라이브러리(예: Tailwind CDN)의 스토리지 접근 에러를 무시
-window.addEventListener('unhandledrejection', function(event) {
-    if (event.reason && event.reason.message && event.reason.message.includes('storage')) {
-        event.preventDefault();
-        // 스토리지 관련 에러는 무시 (파일 프로토콜이나 보안 정책으로 인한 제한)
-        return;
+(function() {
+    // Promise rejection 에러 처리
+    window.addEventListener('unhandledrejection', function(event) {
+        const errorMessage = event.reason?.message || event.reason?.toString() || '';
+        if (errorMessage.toLowerCase().includes('storage') || 
+            errorMessage.toLowerCase().includes('access to storage')) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
+    });
+
+    // 일반 에러 처리
+    window.addEventListener('error', function(event) {
+        const errorMessage = event.message || event.error?.message || '';
+        if (errorMessage.toLowerCase().includes('storage') || 
+            errorMessage.toLowerCase().includes('access to storage')) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
+    }, true);
+
+    // 스토리지 API를 안전하게 래핑 (선택적)
+    try {
+        const originalLocalStorage = window.localStorage;
+        Object.defineProperty(window, 'localStorage', {
+            get: function() {
+                try {
+                    return originalLocalStorage;
+                } catch (e) {
+                    return {
+                        getItem: () => null,
+                        setItem: () => {},
+                        removeItem: () => {},
+                        clear: () => {},
+                        length: 0
+                    };
+                }
+            }
+        });
+    } catch (e) {
+        // 스토리지 래핑 실패 시 무시
     }
-});
+})();
 
 // Mobile Menu Toggle
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');

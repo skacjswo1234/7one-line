@@ -4,6 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>7one-line - 금융상품 전문그룹</title>
+    <!-- Storage error handler - Tailwind CDN 로드 전에 실행 -->
+    <script>
+        // Storage access error handler - 외부 라이브러리의 스토리지 접근 에러를 무시
+        (function() {
+            // Promise rejection 에러 처리
+            window.addEventListener('unhandledrejection', function(event) {
+                const errorMessage = event.reason?.message || event.reason?.toString() || '';
+                if (errorMessage.toLowerCase().includes('storage') || 
+                    errorMessage.toLowerCase().includes('access to storage')) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return false;
+                }
+            });
+
+            // 일반 에러 처리
+            window.addEventListener('error', function(event) {
+                const errorMessage = event.message || event.error?.message || '';
+                if (errorMessage.toLowerCase().includes('storage') || 
+                    errorMessage.toLowerCase().includes('access to storage')) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return false;
+                }
+            }, true);
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
