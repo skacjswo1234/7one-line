@@ -292,8 +292,8 @@ body {
     display: none !important;
 }
 
-/* Mobile styles - 358px 기준 */
-@media (max-width: 358px) {
+/* Mobile styles - 768px 기준 */
+@media (max-width: 768px) {
     /* Hide desktop images on mobile */
     .hero-img-desktop,
     .icon-img-desktop,
