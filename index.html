@@ -4,26 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>7one-line - 금융상품 전문그룹</title>
+    <!-- Favicon - 404 에러 방지 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
     <!-- Storage error handler - Tailwind CDN 로드 전에 실행 -->
     <script>
-        // Storage access error handler - 외부 라이브러리의 스토리지 접근 에러를 무시
+        // Storage access error handler - 외부 라이브러리의 스토리지 접근 에러를 완전히 차단
         (function() {
+            // 스토리지 API를 안전하게 래핑
+            const noopStorage = {
+                getItem: () => null,
+                setItem: () => {},
+                removeItem: () => {},
+                clear: () => {},
+                length: 0,
+                key: () => null
+            };
+
+            // localStorage 래핑
+            try {
+                const originalLocalStorage = window.localStorage;
+                Object.defineProperty(window, 'localStorage', {
+                    get: function() {
+                        try {
+                            // 접근 시도
+                            originalLocalStorage.getItem('test');
+                            return originalLocalStorage;
+                        } catch (e) {
+                            return noopStorage;
+                        }
+                    },
+                    configurable: true
+                });
+            } catch (e) {
+                // 이미 차단된 경우
+            }
+
+            // sessionStorage 래핑
+            try {
+                const originalSessionStorage = window.sessionStorage;
+                Object.defineProperty(window, 'sessionStorage', {
+                    get: function() {
+                        try {
+                            originalSessionStorage.getItem('test');
+                            return originalSessionStorage;
+                        } catch (e) {
+                            return noopStorage;
+                        }
+                    },
+                    configurable: true
+                });
+            } catch (e) {
+                // 이미 차단된 경우
+            }
+
             // Promise rejection 에러 처리
             window.addEventListener('unhandledrejection', function(event) {
                 const errorMessage = event.reason?.message || event.reason?.toString() || '';
                 if (errorMessage.toLowerCase().includes('storage') || 
-                    errorMessage.toLowerCase().includes('access to storage')) {
+                    errorMessage.toLowerCase().includes('access to storage') ||
+                    errorMessage.toLowerCase().includes('not allowed')) {
                     event.preventDefault();
                     event.stopPropagation();
                     return false;
                 }
-            });
+            }, true);
 
             // 일반 에러 처리
             window.addEventListener('error', function(event) {
                 const errorMessage = event.message || event.error?.message || '';
                 if (errorMessage.toLowerCase().includes('storage') || 
-                    errorMessage.toLowerCase().includes('access to storage')) {
+                    errorMessage.toLowerCase().includes('access to storage') ||
+                    errorMessage.toLowerCase().includes('not allowed')) {
                     event.preventDefault();
                     event.stopPropagation();
                     return false;
@@ -44,7 +95,9 @@
         <div class="container mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4">
-                    <h1 class="text-2xl font-bold text-blue-600">7one-line</h1>
+                    <a href="#home" class="logo-link">
+                        <img src="images/7-logo.png" alt="7one-line" class="header-logo">
+                    </a>
                 </div>
                 
                 <!-- Desktop Navigation -->
@@ -71,7 +124,9 @@
     <!-- Mobile Sidebar Menu -->
     <div class="mobile-sidebar" id="mobileSidebar">
         <div class="mobile-sidebar-header">
-            <h2 class="text-xl font-bold text-blue-600">7one-line</h2>
+            <a href="#home" class="logo-link">
+                <img src="images/7-logo.png" alt="7one-line" class="header-logo">
+            </a>
             <button class="mobile-sidebar-close" id="mobileSidebarClose">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>

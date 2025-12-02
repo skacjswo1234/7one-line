@@ -87,6 +87,22 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// Logo click handler - 히어로 섹션으로 스크롤
+document.querySelectorAll('.logo-link').forEach(logoLink => {
+    logoLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        const heroSection = document.getElementById('home');
+        if (heroSection) {
+            heroSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+            // Close mobile menu if open
+            closeMobileMenu();
+        }
+    });
+});
+
 // Form submission handler
 document.querySelector('.form-submit-button')?.addEventListener('click', function(e) {
     e.preventDefault();

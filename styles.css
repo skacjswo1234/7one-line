@@ -51,6 +51,28 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+.header .container {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+/* Logo */
+.logo-link {
+    display: inline-block;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.logo-link:hover {
+    opacity: 0.8;
+}
+
+.header-logo {
+    height: 60px;
+    width: auto;
+    display: block;
+}
+
 /* Desktop Navigation */
 .desktop-nav {
     display: flex;
@@ -129,6 +151,11 @@ body {
     align-items: center;
     padding: 20px;
     border-bottom: 1px solid #e5e7eb;
+}
+
+.mobile-sidebar-header .header-logo {
+    height: 70px;
+    width: auto;
 }
 
 .mobile-sidebar-close {
@@ -867,6 +894,10 @@ body {
 
     .mobile-menu-btn {
         display: block;
+    }
+
+    .header-logo {
+        height: 70px;
     }
 
     .icon-grid {
