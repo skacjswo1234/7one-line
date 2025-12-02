@@ -1,3 +1,12 @@
+// Storage access error handler - 외부 라이브러리(예: Tailwind CDN)의 스토리지 접근 에러를 무시
+window.addEventListener('unhandledrejection', function(event) {
+    if (event.reason && event.reason.message && event.reason.message.includes('storage')) {
+        event.preventDefault();
+        // 스토리지 관련 에러는 무시 (파일 프로토콜이나 보안 정책으로 인한 제한)
+        return;
+    }
+});
+
 // Mobile Menu Toggle
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const mobileSidebar = document.getElementById('mobileSidebar');
