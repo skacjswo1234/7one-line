@@ -1,0 +1,160 @@
+// Mobile Menu Toggle
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileSidebar = document.getElementById('mobileSidebar');
+const mobileSidebarClose = document.getElementById('mobileSidebarClose');
+const mobileSidebarOverlay = document.getElementById('mobileSidebarOverlay');
+
+mobileMenuBtn?.addEventListener('click', function() {
+    mobileSidebar.classList.add('active');
+    mobileSidebarOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+});
+
+mobileSidebarClose?.addEventListener('click', function() {
+    closeMobileMenu();
+});
+
+mobileSidebarOverlay?.addEventListener('click', function() {
+    closeMobileMenu();
+});
+
+function closeMobileMenu() {
+    mobileSidebar.classList.remove('active');
+    mobileSidebarOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+            // Close mobile menu if open
+            closeMobileMenu();
+        }
+    });
+});
+
+// Form submission handler
+document.querySelector('.form-submit-button')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const nameInput = document.querySelector('.form-input[type="text"]');
+    const phoneInput = document.querySelector('.form-input[type="tel"]');
+    const privacyCheckbox = document.getElementById('privacy-agree');
+    
+    // Validation
+    if (!nameInput.value.trim()) {
+        alert('이름을 입력해주세요.');
+        nameInput.focus();
+        return;
+    }
+    
+    if (!phoneInput.value.trim()) {
+        alert('연락처를 입력해주세요.');
+        phoneInput.focus();
+        return;
+    }
+    
+    if (!privacyCheckbox.checked) {
+        alert('개인정보 수집 및 이용동의에 체크해주세요.');
+        return;
+    }
+    
+    // Phone number validation (numbers only)
+    const phoneRegex = /^[0-9]+$/;
+    if (!phoneRegex.test(phoneInput.value)) {
+        alert('연락처는 숫자만 입력해주세요.');
+        phoneInput.focus();
+        return;
+    }
+    
+    // Form submission (여기서 실제 API 호출로 대체)
+    alert('대출상담 신청이 완료되었습니다. 담당자가 곧 연락드리겠습니다.');
+    
+    // Reset form
+    nameInput.value = '';
+    phoneInput.value = '';
+    privacyCheckbox.checked = false;
+});
+
+// Hero CTA Button click handler
+document.querySelector('.hero-cta-button')?.addEventListener('click', function() {
+    const formSection = document.querySelector('.loan-form-section');
+    if (formSection) {
+        formSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+});
+
+// Lightning inquiry button
+document.querySelector('.lightning-inquiry-btn')?.addEventListener('click', function() {
+    const formSection = document.querySelector('.loan-form-section');
+    if (formSection) {
+        formSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+});
+
+// Top button
+document.getElementById('topBtn')?.addEventListener('click', function() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+
+// Phone button
+document.querySelector('.floating-btn-phone')?.addEventListener('click', function() {
+    window.location.href = 'tel:1661-5851';
+});
+
+// Message button
+document.querySelector('.floating-btn-message')?.addEventListener('click', function() {
+    // 카카오톡 또는 메시지 앱 연결 (필요시 수정)
+    window.open('https://pf.kakao.com/_your_kakao_id', '_blank');
+});
+
+// Phone button in mobile app card
+document.querySelector('.phone-button')?.addEventListener('click', function() {
+    const formSection = document.querySelector('.loan-form-section');
+    if (formSection) {
+        formSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+});
+
+// Animation on scroll
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+// Observe elements for animation
+document.querySelectorAll('.loan-type-card, .process-step, .mobile-app-card, .loan-features-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+});
+

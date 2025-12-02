@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7one-line - 금융상품 전문그룹</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gmarket+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy@1.0/Paperlogy.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold text-blue-600">7one-line</h1>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav class="desktop-nav">
+                    <a href="#home" class="nav-link">홈</a>
+                    <a href="#credit-collateral" class="nav-link">신용 - 담보</a>
+                    <a href="#loan" class="nav-link">대출</a>
+                    <a href="#loan-types" class="nav-link">대출종류</a>
+                    <a href="#loan-process" class="nav-link">대출과정</a>
+                    <a href="#interest-info" class="nav-link">금리 및 상환안내</a>
+                    <a href="#loan-apply" class="nav-link">대출 신청하기</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Sidebar Menu -->
+    <div class="mobile-sidebar" id="mobileSidebar">
+        <div class="mobile-sidebar-header">
+            <h2 class="text-xl font-bold text-blue-600">7one-line</h2>
+            <button class="mobile-sidebar-close" id="mobileSidebarClose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="mobile-nav">
+            <a href="#home" class="mobile-nav-link">홈</a>
+            <a href="#credit-collateral" class="mobile-nav-link">신용 - 담보</a>
+            <a href="#loan" class="mobile-nav-link">대출</a>
+            <a href="#loan-types" class="mobile-nav-link">대출종류</a>
+            <a href="#loan-process" class="mobile-nav-link">대출과정</a>
+            <a href="#interest-info" class="mobile-nav-link">금리 및 상환안내</a>
+            <a href="#loan-apply" class="mobile-nav-link">대출 신청하기</a>
+        </nav>
+    </div>
+    <div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
+
+    <!-- 번개 아이콘 (오른쪽 상단 고정) -->
+    <button class="lightning-inquiry-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="currentColor"/>
+        </svg>
+        <span>문의</span>
+    </button>
+
+    <!-- Section 1: Hero Banner -->
+    <section id="home" class="hero-section">
+        <div class="hero-container relative">
+            <img src="images/h-1.png" alt="Hero Banner" class="hero-img-desktop w-full h-auto">
+            <img src="images/h-1-m.png" alt="Hero Banner" class="hero-img-mobile w-full h-auto">
+            
+            <!-- 대출상담신청하기 버튼 -->
+            <div class="hero-cta-wrapper">
+                <button class="hero-cta-button">
+                    대출상담 신청하기
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Icon Grid Section -->
+    <section id="credit-collateral" class="icon-grid-section">
+        <div class="container mx-auto px-4">
+            <img src="images/h-2.png" alt="Icon Grid" class="icon-img-desktop w-full h-auto">
+            <img src="images/h-2-m.png" alt="Icon Grid" class="icon-img-mobile w-full h-auto">
+        </div>
+    </section>
+
+    <!-- Footer Text Section -->
+    <section id="loan" class="footer-text-section">
+        <div class="container mx-auto px-4">
+            <img src="images/h-3.png" alt="Footer Text" class="footer-img-desktop w-full h-auto">
+            <img src="images/h-3-m.png" alt="Footer Text" class="footer-img-mobile w-full h-auto">
+        </div>
+    </section>
+
+    <!-- Section 3: Loan Types -->
+    <section id="loan-types" class="loan-types-section">
+        <div class="container mx-auto px-4 py-20">
+            <h2 class="section-title">대출종류</h2>
+                <div class="grid md:grid-cols-3 gap-8 mt-12">
+                    <!-- 직장인 대출 -->
+                    <div class="loan-type-card">
+                        <div class="loan-icon bg-blue-100">
+                            <span class="icon-symbol">💼</span>
+                        </div>
+                        <h3 class="loan-type-title">직장인 대출</h3>
+                        <div class="loan-details">
+                            <div class="detail-item">
+                                <span class="detail-bar"></span>
+                                <div>
+                                    <span class="detail-label">상품설명</span>
+                                    <span class="detail-value">채무통합 / 자금전환 / 생계자금</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-bar"></span>
+                                <div>
+                                    <span class="detail-label">자격조건</span>
+                                    <span class="detail-value">만 24세 이상 대한민국 근로자</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-bar"></span>
+                                <div>
+                                    <span class="detail-label">상환방법</span>
+                                    <span class="detail-value">원리금균등, 만기일시</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-bar"></span>
+                                <div>
+                                    <span class="detail-label">중도상환수수료</span>
+                                    <span class="detail-value">최대 2% 이내</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 사업자 대출 -->
+                    <div class="loan-type-card">
+                        <div class="loan-icon bg-purple-100">
+                            <span class="icon-symbol">👥</span>
+                        </div>
+                        <h3 class="loan-type-title">사업자 대출</h3>
+                        <div class="loan-details">
+                            <div class="detail-item">
+                                <span class="detail-bar"></span>
+                                <div>
+                                    <span class="detail-label">상품설명</span>
+                                    <span class="detail-value">채무통합 / 자금전환 / 생계자금</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-bar"></span>
+                                <div>
+                                    <span class="detail-label">자격조건</span>
+                                    <span class="detail-value">만 24세 이상 대한민국 사업자</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-bar"></span>
+                                <div>
+                                    <span class="detail-label">상환방법</span>
+                                    <span class="detail-value">원리금균등, 만기일시</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-bar"></span>
+                                <div>
+                                    <span class="detail-label">중도상환수수료</span>
+                                    <span class="detail-value">최대 2% 이내</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 담보 대출 -->
+                    <div class="loan-type-card">
+                        <div class="loan-icon bg-green-100">
+                            <span class="icon-symbol">📍</span>
+                        </div>
+                        <h3 class="loan-type-title">담보 대출</h3>
+                        <div class="loan-details">
+                            <div class="detail-item">
+                                <span class="detail-bar"></span>
+                                <div>
+                                    <span class="detail-label">상품설명</span>
+                                    <span class="detail-value">채무통합 / 자금전환 / 생계자금</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-bar"></span>
+                                <div>
+                                    <span class="detail-label">자격조건</span>
+                                    <span class="detail-value">만 24세 이상 대한민국 자산 소유자</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-bar"></span>
+                                <div>
+                                    <span class="detail-label">상환방법</span>
+                                    <span class="detail-value">원리금균등, 만기일시</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-bar"></span>
+                                <div>
+                                    <span class="detail-label">중도상환수수료</span>
+                                    <span class="detail-value">최대 2% 이내</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Loan Process -->
+    <section id="loan-process" class="loan-process-section">
+        <div class="container mx-auto px-4 py-20">
+            <h2 class="section-title">대출과정</h2>
+                <div class="process-steps mt-12">
+                    <!-- Step 1 -->
+                    <div class="process-step">
+                        <div class="process-icon bg-blue-100">
+                            <span class="icon-symbol">💬</span>
+                        </div>
+                        <div class="process-number">01</div>
+                        <h3 class="process-title">대출상담</h3>
+                        <p class="process-description">전문 대출상담사와의 자세하고 친절한 상담</p>
+                    </div>
+
+                    <div class="process-arrow">→</div>
+
+                    <!-- Step 2 -->
+                    <div class="process-step">
+                        <div class="process-icon bg-blue-100">
+                            <span class="icon-symbol">📋</span>
+                        </div>
+                        <div class="process-number">02</div>
+                        <h3 class="process-title">서류준비 및 접수</h3>
+                        <p class="process-description">번거로움을 최소화한 간단한 서류로 진행되는 빠른접수</p>
+                    </div>
+
+                    <div class="process-arrow">→</div>
+
+                    <!-- Step 3 -->
+                    <div class="process-step">
+                        <div class="process-icon bg-blue-100">
+                            <span class="icon-symbol">🔍</span>
+                        </div>
+                        <div class="process-number">03</div>
+                        <h3 class="process-title">적합성 검사</h3>
+                        <p class="process-description">철저한 개인정보 보호아래 진행되는 심사절차</p>
+                    </div>
+
+                    <div class="process-arrow">→</div>
+
+                    <!-- Step 4 -->
+                    <div class="process-step">
+                        <div class="process-icon bg-blue-100">
+                            <span class="icon-symbol">✓</span>
+                        </div>
+                        <div class="process-number">04</div>
+                        <h3 class="process-title">본인확인 후 대출진행</h3>
+                        <p class="process-description">본인 확인 후 대출금으로 즉시송금</p>
+                    </div>
+                </div>
+        </div>
+    </section>
+
+    <!-- Floating Action Buttons (오른쪽 하단) -->
+    <div class="floating-buttons">
+        <button class="floating-btn" id="topBtn" title="맨 위로">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4L4 12H8V20H16V12H20L12 4Z" fill="currentColor"/>
+            </svg>
+        </button>
+        <button class="floating-btn floating-btn-phone" title="전화하기">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.62 10.79C8.06 13.62 10.38 15.94 13.21 17.38L15.41 15.18C15.69 14.9 16.08 14.82 16.43 14.93C17.55 15.3 18.75 15.5 20 15.5C20.55 15.5 21 15.95 21 16.5V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z" fill="currentColor"/>
+            </svg>
+        </button>
+        <button class="floating-btn floating-btn-message" title="메시지">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H6L4 18V4H20V16Z" fill="currentColor"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Section 4: Loan Application Form -->
+    <section id="loan-apply" class="loan-form-section">
+        <!-- Info Section (Dark Gray) -->
+        <div id="interest-info" class="info-section">
+            <div class="container mx-auto px-4 py-12">
+                <div class="grid md:grid-cols-3 gap-8 text-white">
+                    <!-- 금리 및 상환안내 -->
+                    <div>
+                        <h3 class="info-title">금리 및 상환안내</h3>
+                        <div class="info-content">
+                            <p class="mb-4">
+                                대출 총 비용 예시는 다음과 같습니다. 1,000,000원을 12개월 동안 이자 20%, 최대 이자율 20%로 대출할 시 총 상환금액은 1,111,614원입니다. (만기일시상환시)
+                            </p>
+                            <ul class="space-y-2 text-sm">
+                                <li>• 대출금리 : 연~20% 이내(담보대출에 한해 심사기준에 따라 차등적용)</li>
+                                <li>• 연체이율 : 연~20%이내 대출중개수수료 없음. 취급수수료 등 기타부대비용 없음.</li>
+                                <li>• 상환방법 : 원리금 균등 상환방식, 만기일시상환방법 취급수수료 등 기타부대비용 및 조기상환 조건 없음.</li>
+                                <li>• *대출상품에 따라 달라질 수 있습니다.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 7one-line -->
+                    <div>
+                        <h3 class="info-title">7one-line</h3>
+                        <div class="info-content">
+                            <ul class="space-y-2 text-sm">
+                                <li>• 이자 외 추가 비용 없음. 단, 일부 담보 대출상품에 한해 저당 설정, 해지비용 및 조기상환 수수료가 발생할 수 있습니다.</li>
+                                <li>• 이자와 조기상환 수수료의 합산액은 20%를 초과하지 않습니다.</li>
+                                <li>• 이 사이트에서 광고되는 상품들의 상환기간은 모두 60일 이상이며 최장 상환기간 120개월 미만입니다.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 주의사항 -->
+                    <div>
+                        <h3 class="info-title">주의사항</h3>
+                        <div class="info-content">
+                            <ul class="space-y-2 text-sm">
+                                <li>• 과도한 빚은 당신에게 큰 불행을 안겨줄 수 있습니다.</li>
+                                <li>• 중개수수료를 요구하거나 받는 것은 불법입니다.</li>
+                                <li>• 대출 시 귀하의 신용등급 또는 개인신용평점이 탈락할 수 있습니다.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Section (White) -->
+        <div class="form-section">
+            <div class="container mx-auto px-4 py-12">
+                <h2 class="form-title">대출상담 신청하기</h2>
+                <div class="form-container">
+                    <div class="form-inputs">
+                        <div class="input-group">
+                            <label>이름</label>
+                            <input type="text" placeholder="이름입력" class="form-input">
+                        </div>
+                        <div class="input-group">
+                            <label>연락처 입력</label>
+                            <input type="tel" placeholder="-없이 숫자만 입력" class="form-input">
+                        </div>
+                    </div>
+                    <button class="form-submit-button">
+                        대출상담 신청하기
+                    </button>
+                </div>
+                <div class="form-checkbox">
+                    <input type="checkbox" id="privacy-agree">
+                    <label for="privacy-agree">개인정보 수집 및 이용동의 <a href="#" class="text-blue-600 underline">[자세히보기]</a></label>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
