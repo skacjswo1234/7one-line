@@ -168,24 +168,6 @@ document.querySelector('.lightning-inquiry-btn')?.addEventListener('click', func
     }
 });
 
-// Top button
-document.getElementById('topBtn')?.addEventListener('click', function() {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-});
-
-// Phone button
-document.querySelector('.floating-btn-phone')?.addEventListener('click', function() {
-    window.location.href = 'tel:1661-5851';
-});
-
-// Message button
-document.querySelector('.floating-btn-message')?.addEventListener('click', function() {
-    // 카카오톡 또는 메시지 앱 연결 (필요시 수정)
-    window.open('https://pf.kakao.com/_your_kakao_id', '_blank');
-});
 
 // Phone button in mobile app card
 document.querySelector('.phone-button')?.addEventListener('click', function() {
