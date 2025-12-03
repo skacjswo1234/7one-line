@@ -146,35 +146,45 @@ document.querySelector('.form-submit-button')?.addEventListener('click', functio
     privacyCheckbox.checked = false;
 });
 
-// 링크 동적 로드
+// 링크 동적 로드 - 최신 링크 하나만 가져와서 히어로 버튼에 연결
 async function loadLinks() {
     try {
         const response = await fetch('/api/links');
         const data = await response.json();
         
-        if (data.success && data.data) {
-            // hero_button 링크 찾기
-            const heroLink = data.data.find(link => link.name === 'hero_button');
-            if (heroLink) {
-                const heroButtonLink = document.getElementById('heroButtonLink');
-                if (heroButtonLink) {
-                    heroButtonLink.href = heroLink.url;
-                    
-                    // 링크가 #로 시작하면 스크롤 처리
-                    if (heroLink.url.startsWith('#')) {
-                        heroButtonLink.addEventListener('click', function(e) {
-                            e.preventDefault();
-                            const target = document.querySelector(heroLink.url);
-                            if (target) {
-                                target.scrollIntoView({
-                                    behavior: 'smooth',
-                                    block: 'start'
-                                });
-                            }
+        const heroButtonLink = document.getElementById('heroButtonLink');
+        if (!heroButtonLink) return;
+        
+        if (data.success && data.data && data.data.url) {
+            const linkUrl = data.data.url;
+            heroButtonLink.href = linkUrl;
+            
+            // 링크가 #로 시작하면 스크롤 처리
+            if (linkUrl.startsWith('#')) {
+                heroButtonLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(linkUrl);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
                         });
                     }
-                }
+                });
             }
+        } else {
+            // 기본 동작 유지
+            heroButtonLink.href = '#loan-apply';
+            heroButtonLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                const formSection = document.querySelector('.loan-form-section');
+                if (formSection) {
+                    formSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         }
     } catch (error) {
         console.error('링크 로드 실패:', error);

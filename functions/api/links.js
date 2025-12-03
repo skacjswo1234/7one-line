@@ -1,15 +1,15 @@
-// GET: 모든 링크 조회
+// GET: 최신 링크 하나만 조회
 export async function onRequestGet(context) {
     const { env } = context;
 
     try {
         const result = await env['7one-line-db'].prepare(
-            'SELECT * FROM links ORDER BY name'
-        ).all();
+            'SELECT * FROM links ORDER BY updated_at DESC LIMIT 1'
+        ).first();
 
         return new Response(JSON.stringify({ 
             success: true, 
-            data: result.results 
+            data: result || null
         }), {
             headers: { 'Content-Type': 'application/json' }
         });
@@ -24,15 +24,15 @@ export async function onRequestGet(context) {
     }
 }
 
-// PUT: 링크 업데이트 또는 생성
+// PUT: 링크 등록 (최신 링크로 저장)
 export async function onRequestPut(context) {
     const { request, env } = context;
-    const { name, url, description } = await request.json();
+    const { url } = await request.json();
 
-    if (!name || !url) {
+    if (!url) {
         return new Response(JSON.stringify({ 
             success: false, 
-            message: 'name과 url은 필수입니다.' 
+            message: 'url은 필수입니다.' 
         }), {
             status: 400,
             headers: { 'Content-Type': 'application/json' }
@@ -40,26 +40,14 @@ export async function onRequestPut(context) {
     }
 
     try {
-        // 링크가 존재하는지 확인
-        const existing = await env['7one-line-db'].prepare(
-            'SELECT * FROM links WHERE name = ?'
-        ).bind(name).first();
-
-        if (existing) {
-            // 업데이트
-            await env['7one-line-db'].prepare(
-                'UPDATE links SET url = ?, description = ?, updated_at = CURRENT_TIMESTAMP WHERE name = ?'
-            ).bind(url, description || null, name).run();
-        } else {
-            // 새로 생성
-            await env['7one-line-db'].prepare(
-                'INSERT INTO links (name, url, description) VALUES (?, ?, ?)'
-            ).bind(name, url, description || null).run();
-        }
+        // 새 링크 추가 (항상 새로 추가)
+        await env['7one-line-db'].prepare(
+            'INSERT INTO links (url) VALUES (?)'
+        ).bind(url).run();
 
         return new Response(JSON.stringify({ 
             success: true, 
-            message: '링크가 저장되었습니다.' 
+            message: '링크가 등록되었습니다.' 
         }), {
             headers: { 'Content-Type': 'application/json' }
         });
@@ -74,16 +62,16 @@ export async function onRequestPut(context) {
     }
 }
 
-// DELETE: 링크 삭제
+// DELETE: 링크 삭제 (id로 삭제)
 export async function onRequestDelete(context) {
     const { request, env } = context;
     const url = new URL(request.url);
-    const name = url.searchParams.get('name');
+    const id = url.searchParams.get('id');
 
-    if (!name) {
+    if (!id) {
         return new Response(JSON.stringify({ 
             success: false, 
-            message: 'name 파라미터가 필요합니다.' 
+            message: 'id 파라미터가 필요합니다.' 
         }), {
             status: 400,
             headers: { 'Content-Type': 'application/json' }
@@ -93,8 +81,8 @@ export async function onRequestDelete(context) {
     try {
         // 링크가 존재하는지 확인
         const existing = await env['7one-line-db'].prepare(
-            'SELECT * FROM links WHERE name = ?'
-        ).bind(name).first();
+            'SELECT * FROM links WHERE id = ?'
+        ).bind(id).first();
 
         if (!existing) {
             return new Response(JSON.stringify({ 
@@ -108,8 +96,8 @@ export async function onRequestDelete(context) {
 
         // 링크 삭제
         await env['7one-line-db'].prepare(
-            'DELETE FROM links WHERE name = ?'
-        ).bind(name).run();
+            'DELETE FROM links WHERE id = ?'
+        ).bind(id).run();
 
         return new Response(JSON.stringify({ 
             success: true, 

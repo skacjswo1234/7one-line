@@ -6,12 +6,11 @@ CREATE TABLE IF NOT EXISTS admin (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Links 테이블 (링크 관리용)
+-- Links 테이블 (링크 관리용) - 히어로 버튼 링크만 저장
 CREATE TABLE IF NOT EXISTS links (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE,  
     url TEXT NOT NULL,          
-    description TEXT,            
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
