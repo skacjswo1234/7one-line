@@ -24,7 +24,7 @@ export async function onRequestGet(context) {
     }
 }
 
-// PUT: 링크 업데이트
+// PUT: 링크 업데이트 또는 생성
 export async function onRequestPut(context) {
     const { request, env } = context;
     const { name, url, description } = await request.json();
@@ -67,6 +67,60 @@ export async function onRequestPut(context) {
         return new Response(JSON.stringify({ 
             success: false, 
             message: '링크 저장 중 오류가 발생했습니다.' 
+        }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+}
+
+// DELETE: 링크 삭제
+export async function onRequestDelete(context) {
+    const { request, env } = context;
+    const url = new URL(request.url);
+    const name = url.searchParams.get('name');
+
+    if (!name) {
+        return new Response(JSON.stringify({ 
+            success: false, 
+            message: 'name 파라미터가 필요합니다.' 
+        }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+
+    try {
+        // 링크가 존재하는지 확인
+        const existing = await env['7one-line-db'].prepare(
+            'SELECT * FROM links WHERE name = ?'
+        ).bind(name).first();
+
+        if (!existing) {
+            return new Response(JSON.stringify({ 
+                success: false, 
+                message: '링크를 찾을 수 없습니다.' 
+            }), {
+                status: 404,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        // 링크 삭제
+        await env['7one-line-db'].prepare(
+            'DELETE FROM links WHERE name = ?'
+        ).bind(name).run();
+
+        return new Response(JSON.stringify({ 
+            success: true, 
+            message: '링크가 삭제되었습니다.' 
+        }), {
+            headers: { 'Content-Type': 'application/json' }
+        });
+    } catch (error) {
+        return new Response(JSON.stringify({ 
+            success: false, 
+            message: '링크 삭제 중 오류가 발생했습니다.' 
         }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
