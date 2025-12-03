@@ -71,18 +71,26 @@ function closeMobileMenu() {
     document.body.style.overflow = '';
 }
 
-// Smooth scroll for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+// Smooth scroll for anchor links (heroButtonLink 제외)
+document.querySelectorAll('a[href^="#"]:not(#heroButtonLink)').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-            // Close mobile menu if open
-            closeMobileMenu();
+        const href = this.getAttribute('href');
+        // href가 #로 시작하는지 다시 확인
+        if (href && href.startsWith('#')) {
+            try {
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    closeMobileMenu();
+                }
+            } catch (error) {
+                console.error('스크롤 처리 오류:', error);
+            }
         }
     });
 });
