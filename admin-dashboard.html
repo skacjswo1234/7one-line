@@ -23,14 +23,28 @@
             transition: transform 0.3s ease-in-out;
         }
         
-        .sidebar.mobile-hidden {
-            transform: translateX(100%);
+        /* 데스크톱: 왼쪽에 고정, 항상 표시 */
+        @media (min-width: 1024px) {
+            .sidebar {
+                left: 0;
+                right: auto;
+                transform: translateX(0) !important;
+            }
+            
+            .sidebar.mobile-hidden {
+                transform: translateX(0) !important;
+            }
         }
         
+        /* 모바일: 오른쪽에 위치, 기본적으로 숨김 */
         @media (max-width: 1023px) {
             .sidebar {
                 right: 0;
                 left: auto;
+            }
+            
+            .sidebar.mobile-hidden {
+                transform: translateX(100%);
             }
         }
         
@@ -61,15 +75,6 @@
     </style>
 </head>
 <body class="dark bg-gray-900 min-h-screen">
-    <!-- 모바일 메뉴 버튼 -->
-    <button 
-        id="mobileMenuBtn" 
-        class="lg:hidden fixed top-4 right-4 z-50 bg-gray-800 text-white p-3 rounded-lg shadow-lg hover:bg-gray-700 transition"
-    >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-    </button>
 
     <!-- 모바일 오버레이 -->
     <div 
@@ -81,10 +86,20 @@
     <!-- 사이드바 네비게이션 -->
     <aside 
         id="sidebar" 
-        class="sidebar fixed lg:left-0 right-0 top-0 h-full w-64 bg-gray-800 border-r border-gray-700 z-40 lg:translate-x-0 mobile-hidden"
+        class="sidebar fixed top-0 h-full w-64 bg-gray-800 border-r border-gray-700 z-40 mobile-hidden"
     >
-        <div class="p-6 border-b border-gray-700">
+        <div class="p-6 border-b border-gray-700 flex items-center justify-between">
             <h1 class="text-xl font-bold text-white">관리자 대시보드</h1>
+            <!-- 모바일 닫기 버튼 -->
+            <button 
+                onclick="closeMobileMenu()" 
+                class="lg:hidden text-gray-400 hover:text-white transition"
+                aria-label="메뉴 닫기"
+            >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
         </div>
         
         <nav class="p-4 space-y-2">
@@ -146,9 +161,18 @@
     <!-- 메인 콘텐츠 영역 -->
     <main class="lg:ml-64 min-h-screen">
         <!-- 헤더 (모바일용) -->
-        <header class="lg:hidden bg-gray-800 shadow-lg border-b border-gray-700 p-4">
-            <div class="flex items-center justify-between">
-                <h1 class="text-xl font-bold text-white">관리자 대시보드</h1>
+        <header class="lg:hidden bg-gray-800 shadow-lg border-b border-gray-700 sticky top-0 z-30">
+            <div class="flex items-center justify-between p-4">
+                <h1 class="text-lg font-bold text-white">관리자 대시보드</h1>
+                <button 
+                    id="mobileMenuBtnHeader" 
+                    class="bg-gray-700 text-white p-2 rounded-lg hover:bg-gray-600 transition"
+                    aria-label="메뉴 열기"
+                >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
             </div>
         </header>
 
@@ -308,21 +332,43 @@
         }
 
         // 모바일 메뉴 열기/닫기
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtnHeader');
         const sidebar = document.getElementById('sidebar');
         const mobileOverlay = document.getElementById('mobileOverlay');
 
-        mobileMenuBtn?.addEventListener('click', function() {
-            sidebar.classList.remove('mobile-hidden');
-            mobileOverlay.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        });
+        function openMobileMenu() {
+            if (window.innerWidth < 1024) {
+                sidebar.classList.remove('mobile-hidden');
+                mobileOverlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
 
         function closeMobileMenu() {
-            sidebar.classList.add('mobile-hidden');
-            mobileOverlay.classList.add('hidden');
-            document.body.style.overflow = '';
+            if (window.innerWidth < 1024) {
+                sidebar.classList.add('mobile-hidden');
+                mobileOverlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
         }
+
+        mobileMenuBtn?.addEventListener('click', function() {
+            openMobileMenu();
+        });
+
+        // 윈도우 리사이즈 시 데스크톱으로 전환되면 모바일 메뉴 닫기
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) {
+                closeMobileMenu();
+            }
+        });
+
+        // ESC 키로 모바일 메뉴 닫기
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && window.innerWidth < 1024) {
+                closeMobileMenu();
+            }
+        });
 
         // 탭 전환
         function switchTab(tabName) {
