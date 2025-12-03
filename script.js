@@ -146,8 +146,69 @@ document.querySelector('.form-submit-button')?.addEventListener('click', functio
     privacyCheckbox.checked = false;
 });
 
-// Hero CTA Button click handler
-document.querySelector('.hero-cta-button')?.addEventListener('click', function() {
+// 링크 동적 로드
+async function loadLinks() {
+    try {
+        const response = await fetch('/api/links');
+        const data = await response.json();
+        
+        if (data.success && data.data) {
+            // hero_button 링크 찾기
+            const heroLink = data.data.find(link => link.name === 'hero_button');
+            if (heroLink) {
+                const heroButtonLink = document.getElementById('heroButtonLink');
+                if (heroButtonLink) {
+                    heroButtonLink.href = heroLink.url;
+                    
+                    // 링크가 #로 시작하면 스크롤 처리
+                    if (heroLink.url.startsWith('#')) {
+                        heroButtonLink.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            const target = document.querySelector(heroLink.url);
+                            if (target) {
+                                target.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        console.error('링크 로드 실패:', error);
+        // 기본 동작 유지
+        const heroButtonLink = document.getElementById('heroButtonLink');
+        if (heroButtonLink) {
+            heroButtonLink.href = '#loan-apply';
+            heroButtonLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                const formSection = document.querySelector('.loan-form-section');
+                if (formSection) {
+                    formSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        }
+    }
+}
+
+// 페이지 로드 시 링크 불러오기
+loadLinks();
+
+// Hero CTA Button click handler (기본 동작 - 링크가 없을 경우)
+document.querySelector('.hero-cta-button')?.addEventListener('click', function(e) {
+    const heroButtonLink = document.getElementById('heroButtonLink');
+    // 링크가 설정되어 있으면 링크의 기본 동작 사용
+    if (heroButtonLink && heroButtonLink.href && heroButtonLink.href !== '#') {
+        return;
+    }
+    
+    // 기본 동작: 폼 섹션으로 스크롤
+    e.preventDefault();
     const formSection = document.querySelector('.loan-form-section');
     if (formSection) {
         formSection.scrollIntoView({
