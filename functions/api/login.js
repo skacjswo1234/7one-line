@@ -1,12 +1,22 @@
 export async function onRequestPost(context) {
     const { request, env } = context;
-    const { username, password } = await request.json();
+    const { password } = await request.json();
+
+    if (!password) {
+        return new Response(JSON.stringify({ 
+            success: false, 
+            message: '비밀번호를 입력해주세요.' 
+        }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
 
     try {
-        // admin 테이블에서 사용자 확인
+        // admin 테이블에서 비밀번호만 비교
         const result = await env['7one-line-db'].prepare(
-            'SELECT * FROM admin WHERE username = ? AND password = ?'
-        ).bind(username, password).first();
+            'SELECT * FROM admin WHERE password = ? LIMIT 1'
+        ).bind(password).first();
 
         if (result) {
             return new Response(JSON.stringify({ 
@@ -18,7 +28,7 @@ export async function onRequestPost(context) {
         } else {
             return new Response(JSON.stringify({ 
                 success: false, 
-                message: '아이디 또는 비밀번호가 올바르지 않습니다.' 
+                message: '비밀번호가 올바르지 않습니다.' 
             }), {
                 status: 401,
                 headers: { 'Content-Type': 'application/json' }

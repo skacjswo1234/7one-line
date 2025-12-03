@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>관리자 로그인 - 7one-line</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gmarket+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -14,30 +19,16 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+<body class="dark bg-gray-900 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 w-full max-w-md border border-gray-700">
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">관리자 로그인</h1>
-            <p class="text-gray-600">7one-line 관리 시스템</p>
+            <h1 class="text-3xl font-bold text-white mb-2">관리자 로그인</h1>
+            <p class="text-gray-400">7one-line 관리 시스템</p>
         </div>
 
         <form id="loginForm" class="space-y-6">
             <div>
-                <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
-                    아이디
-                </label>
-                <input 
-                    type="text" 
-                    id="username" 
-                    name="username" 
-                    required
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-                    placeholder="아이디를 입력하세요"
-                >
-            </div>
-
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                <label for="password" class="block text-sm font-medium text-gray-300 mb-2">
                     비밀번호
                 </label>
                 <input 
@@ -45,12 +36,13 @@
                     id="password" 
                     name="password" 
                     required
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition placeholder-gray-400"
                     placeholder="비밀번호를 입력하세요"
+                    autofocus
                 >
             </div>
 
-            <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div id="errorMessage" class="hidden bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg text-sm">
             </div>
 
             <button 
@@ -66,7 +58,6 @@
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('errorMessage');
             const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -82,7 +73,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ password })
                 });
                 
                 const data = await response.json();
