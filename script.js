@@ -147,6 +147,8 @@ document.querySelector('.form-submit-button')?.addEventListener('click', functio
 });
 
 // 링크 동적 로드 - 최신 링크 하나만 가져와서 히어로 버튼에 연결
+let linkClickHandler = null;
+
 async function loadLinks() {
     try {
         const response = await fetch('/api/links');
@@ -155,27 +157,41 @@ async function loadLinks() {
         const heroButtonLink = document.getElementById('heroButtonLink');
         if (!heroButtonLink) return;
         
+        // 기존 이벤트 리스너 제거
+        if (linkClickHandler) {
+            heroButtonLink.removeEventListener('click', linkClickHandler);
+            linkClickHandler = null;
+        }
+        
         if (data.success && data.data && data.data.url) {
             const linkUrl = data.data.url;
             heroButtonLink.href = linkUrl;
             
-            // 링크가 #로 시작하면 스크롤 처리
+            // 링크가 #로 시작하면 스크롤 처리 (페이지 내 링크)
             if (linkUrl.startsWith('#')) {
-                heroButtonLink.addEventListener('click', function(e) {
+                linkClickHandler = function(e) {
                     e.preventDefault();
-                    const target = document.querySelector(linkUrl);
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
+                    try {
+                        const target = document.querySelector(linkUrl);
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    } catch (error) {
+                        console.error('스크롤 처리 오류:', error);
+                        // 오류 발생 시 기본 링크 동작
+                        window.location.href = linkUrl;
                     }
-                });
+                };
+                heroButtonLink.addEventListener('click', linkClickHandler);
             }
+            // 외부 URL인 경우 이벤트 리스너 없이 기본 링크 동작 사용
         } else {
             // 기본 동작 유지
             heroButtonLink.href = '#loan-apply';
-            heroButtonLink.addEventListener('click', function(e) {
+            linkClickHandler = function(e) {
                 e.preventDefault();
                 const formSection = document.querySelector('.loan-form-section');
                 if (formSection) {
@@ -184,15 +200,21 @@ async function loadLinks() {
                         block: 'start'
                     });
                 }
-            });
+            };
+            heroButtonLink.addEventListener('click', linkClickHandler);
         }
     } catch (error) {
         console.error('링크 로드 실패:', error);
         // 기본 동작 유지
         const heroButtonLink = document.getElementById('heroButtonLink');
         if (heroButtonLink) {
+            // 기존 이벤트 리스너 제거
+            if (linkClickHandler) {
+                heroButtonLink.removeEventListener('click', linkClickHandler);
+            }
+            
             heroButtonLink.href = '#loan-apply';
-            heroButtonLink.addEventListener('click', function(e) {
+            linkClickHandler = function(e) {
                 e.preventDefault();
                 const formSection = document.querySelector('.loan-form-section');
                 if (formSection) {
@@ -201,7 +223,8 @@ async function loadLinks() {
                         block: 'start'
                     });
                 }
-            });
+            };
+            heroButtonLink.addEventListener('click', linkClickHandler);
         }
     }
 }
