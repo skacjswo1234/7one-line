@@ -71,8 +71,13 @@ function closeMobileMenu() {
     document.body.style.overflow = '';
 }
 
-// Smooth scroll for anchor links (heroButtonLink 제외)
-document.querySelectorAll('a[href^="#"]:not(#heroButtonLink)').forEach(anchor => {
+// Smooth scroll for anchor links (heroButtonLink는 제외)
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    // heroButtonLink는 완전히 제외
+    if (anchor.id === 'heroButtonLink') {
+        return;
+    }
+    
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const href = this.getAttribute('href');
@@ -154,86 +159,29 @@ document.querySelector('.form-submit-button')?.addEventListener('click', functio
     privacyCheckbox.checked = false;
 });
 
-// 링크 동적 로드 - 최신 링크 하나만 가져와서 히어로 버튼에 연결
-let linkClickHandler = null;
-
+// 히어로 버튼 링크 동적 로드 - 간단하게 처리
 async function loadLinks() {
+    const heroButtonLink = document.getElementById('heroButtonLink');
+    if (!heroButtonLink) return;
+    
     try {
         const response = await fetch('/api/links');
         const data = await response.json();
         
-        const heroButtonLink = document.getElementById('heroButtonLink');
-        if (!heroButtonLink) return;
-        
-        // 기존 이벤트 리스너 제거
-        if (linkClickHandler) {
-            heroButtonLink.removeEventListener('click', linkClickHandler);
-            linkClickHandler = null;
-        }
-        
         if (data.success && data.data && data.data.url) {
             const linkUrl = data.data.url;
+            // 링크 설정만 하고 이벤트 리스너는 추가하지 않음
             heroButtonLink.href = linkUrl;
             
-            // 링크가 #로 시작하면 스크롤 처리 (페이지 내 링크)
-            if (linkUrl.startsWith('#')) {
-                linkClickHandler = function(e) {
-                    e.preventDefault();
-                    try {
-                        const target = document.querySelector(linkUrl);
-                        if (target) {
-                            target.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }
-                    } catch (error) {
-                        console.error('스크롤 처리 오류:', error);
-                        // 오류 발생 시 기본 링크 동작
-                        window.location.href = linkUrl;
-                    }
-                };
-                heroButtonLink.addEventListener('click', linkClickHandler);
-            }
-            // 외부 URL인 경우 이벤트 리스너 없이 기본 링크 동작 사용
+            // 외부 URL인 경우 기본 링크 동작 사용 (이벤트 리스너 불필요)
+            // #로 시작하는 링크도 브라우저 기본 동작 사용
         } else {
-            // 기본 동작 유지
+            // 기본 링크
             heroButtonLink.href = '#loan-apply';
-            linkClickHandler = function(e) {
-                e.preventDefault();
-                const formSection = document.querySelector('.loan-form-section');
-                if (formSection) {
-                    formSection.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            };
-            heroButtonLink.addEventListener('click', linkClickHandler);
         }
     } catch (error) {
         console.error('링크 로드 실패:', error);
-        // 기본 동작 유지
-        const heroButtonLink = document.getElementById('heroButtonLink');
-        if (heroButtonLink) {
-            // 기존 이벤트 리스너 제거
-            if (linkClickHandler) {
-                heroButtonLink.removeEventListener('click', linkClickHandler);
-            }
-            
-            heroButtonLink.href = '#loan-apply';
-            linkClickHandler = function(e) {
-                e.preventDefault();
-                const formSection = document.querySelector('.loan-form-section');
-                if (formSection) {
-                    formSection.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            };
-            heroButtonLink.addEventListener('click', linkClickHandler);
-        }
+        heroButtonLink.href = '#loan-apply';
     }
 }
 
